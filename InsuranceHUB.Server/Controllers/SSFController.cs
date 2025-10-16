@@ -1,13 +1,14 @@
 ﻿using InsuranceHub.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace InsuranceHub.Api.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class SSFController : CommonController
+    public class SSFController : ControllerBase
     {
         private readonly ISSFService _ssfService;
 
@@ -16,16 +17,24 @@ namespace InsuranceHub.Api.Controllers
             _ssfService = ssfService;
         }
 
-        [HttpGet("checkeligibility")]
-        public async Task<IActionResult> GetEligibility([FromQuery] string patientNo)
+        [HttpGet("getpatientdetails")]
+        public async Task<IActionResult> GetPatientDetails([FromQuery] string patientNo)
         {
-            return await InvokeHttpFunction(() => _ssfService.GetPatientEligibilityAsync(patientNo));
+            if (string.IsNullOrWhiteSpace(patientNo))
+                return BadRequest("patientNo is required.");
+
+            var result = await _ssfService.GetPatientDetailsAsync(patientNo);
+            return Ok(result);
         }
 
-        [HttpGet("getpatientdetails")]
-        public async Task<IActionResult> GetPatientDetails([FromQuery] string patientNo, string visitDate)
+        [HttpGet("checkeligibility")]
+        public async Task<IActionResult> GetEligibility([FromQuery] string patientNo, [FromQuery] string visitDate)
         {
-            return await InvokeHttpFunction(() => _ssfService.GetPatientDetailsAsync(patientNo, visitDate));
+            if (string.IsNullOrWhiteSpace(patientNo) || string.IsNullOrWhiteSpace(visitDate))
+                return BadRequest("patientNo and visitDate are required.");
+
+            var result = await _ssfService.GetPatientEligibilityAsync(patientNo, visitDate);
+            return Ok(result);
         }
     }
 }

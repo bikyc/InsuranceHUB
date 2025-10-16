@@ -23,7 +23,7 @@ namespace InsuranceHub.Application.Services
         }
         //public async Task<ResponseMessage<SSFPatientDetails>> GetPatientDetailsAsync(string nshiNumber,)
 
-        public async Task<ResponseMessage<SSFPatientDetails>> GetPatientDetailsAsync(string patientNo, string visitDate)
+        public async Task<ResponseMessage<SSFPatientDetails>> GetPatientDetailsAsync(string patientNo)
         {
             if (string.IsNullOrEmpty(patientNo))
                 return ResponseMessage<SSFPatientDetails>.Failed("Patient number is required");
@@ -36,7 +36,7 @@ namespace InsuranceHub.Application.Services
                     patient = new EligibilityPatientData { reference = $"Patient/{patientNo}" },
                     extension = new List<EligibilityExtension>
                     {
-                        new EligibilityExtension { url = "visitDate", valueString = visitDate }
+                        new EligibilityExtension { url = "visitDate"}
                     }
                 };
 
@@ -59,7 +59,7 @@ namespace InsuranceHub.Application.Services
             }
         }
 
-        public Task<ResponseMessage<EligibilityResponse>> GetPatientEligibilityAsync(string patientNo)
+        public Task<ResponseMessage<EligibilityResponse>> GetPatientEligibilityAsync(string patientNo, string visitDate)
         {
             throw new NotImplementedException();
         }
@@ -84,9 +84,5 @@ namespace InsuranceHub.Application.Services
             client.BaseAddress = new Uri(cred.SSFurl);
         }
 
-        public Task<ResponseMessage<SSFPatientDetails>> GetPatientDetailsAsync(string nshiNumber)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
