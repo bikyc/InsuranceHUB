@@ -3,6 +3,7 @@ using InsuranceHub.Application.Mappings;
 using InsuranceHub.Application.Services;
 using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Infrastructure.Persistence;
+using InsuranceHub.Infrastructure.Services.Cache;
 using InsuranceHUB.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,6 @@ namespace InsuranceHub.Server.DependencyInjection
             // -----------------------------
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddHttpClient();
-            return services;
             return services;
         }
 
@@ -121,7 +121,10 @@ namespace InsuranceHub.Server.DependencyInjection
                 });
             });
 
+            services.AddMemoryCache();
+            services.AddScoped<ICacheService, MemoryCacheService>();
             return services;
+
         }
     }
 }

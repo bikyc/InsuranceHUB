@@ -1,7 +1,6 @@
 ﻿using InsuranceHub.Domain.Interfaces;
-using InsuranceHUB.Infrastructure.Persistence.PatientRepository;
-using InsuranceHub.Infrastructure.Persistence.Repositories;
 using InsuranceHub.Infrastructure.Persistence;
+using InsuranceHub.Infrastructure.Persistence.Repository.PatientRepository;
 using InsuranceHUB.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

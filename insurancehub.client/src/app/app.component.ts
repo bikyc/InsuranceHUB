@@ -3,7 +3,7 @@ import { ENUM_HTTPResponses } from './shared/shared-enums';
 import { SecurityBLService } from './security/security.bl.service';
 import { SecurityService } from './security/security.service';
 import { ClaimRoutes } from './security/routes.model';
-import { SearchableRoute } from './shared/DTOs/SearchebleRoute.dto';
+import { SearchableRoute } from './shared/DTOs/SearchableRoute.dto';
 import * as _ from "lodash";
 
 @Component({
@@ -25,8 +25,6 @@ export class AppComponent {
     private securityService: SecurityService
   ) {
     this.GetAllValidRouteList();
-
-
   }
   GetAllValidRouteList(): void {
     this.securityBLService.GetAllValidRouteList()
@@ -34,13 +32,11 @@ export class AppComponent {
         if (res.Status === ENUM_HTTPResponses.OK) {
           this.securityService.validRouteList = res.Results;
           this.validRoutes = this.securityService.GetAllValidRoutes();
-          //  this.securityService.validRouteList[0].ChildRoutes.filter(s => s.DefaultShow == true).length
           this.filteredValidRoutes = _.cloneDeep(this.validRoutes);
           this.GenerateSearchableRoutes(this.filteredValidRoutes);
         }
       },
         err => {
-          //alert('failed to get the data.. please check log for details.');
           this.logError(err.ErrorMessage);
         });
   }

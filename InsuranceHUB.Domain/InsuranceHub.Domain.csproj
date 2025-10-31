@@ -10,4 +10,8 @@
     <Folder Include="ENUMs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Interfaces\IRbacRepository.cs" />
+  </ItemGroup>
+
 </Project>

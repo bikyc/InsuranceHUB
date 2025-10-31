@@ -2,7 +2,7 @@
 using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Domain.Models;
 
-namespace InsuranceHub.Infrastructure.Persistence.Repositories;
+namespace InsuranceHub.Infrastructure.Persistence.Repository.PatientRepository;
 
 public class ParameterRepository : IParameterRepository
 {

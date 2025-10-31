@@ -1,8 +1,9 @@
 ﻿using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Domain.Models.HIB;
 using InsuranceHub.Domain.Models.Patient;
+using InsuranceHUB.Infrastructure.Persistence;
 
-namespace InsuranceHUB.Infrastructure.Persistence.PatientRepository
+namespace InsuranceHub.Infrastructure.Persistence.Repository.PatientRepository
 {
     public class PatientRepository : IPatientRepository
     {
@@ -13,6 +14,6 @@ namespace InsuranceHUB.Infrastructure.Persistence.PatientRepository
             _context = context;
         }
 
-     
+
     }
 }
