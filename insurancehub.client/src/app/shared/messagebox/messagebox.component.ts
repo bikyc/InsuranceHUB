@@ -1,18 +1,18 @@
-import { Component, Directive } from '@angular/core';
-import { Input, Output, EventEmitter, OnInit } from "@angular/core"
+import { Component } from '@angular/core';
+import { Input } from "@angular/core"
 import { MessageboxService } from './messagebox.service';
 
 @Component({
-  selector: "danphe-msgbox",
+  selector: "app-danphe-msgbox",
   templateUrl: "./messagebox.html"
 })
 export class MessageBoxComponent {
-  @Input("showmsgbox")
-  public showmsgbox: boolean = false;
-  @Input("status")
-  public status: string = "";
-  @Input("message")
-  public message: string = "";
+  @Input()
+  public showmsgbox = false;
+  @Input()
+  public status = "";
+  @Input()
+  public message = "";
 
 
   constructor(public msgBoxService: MessageboxService) {

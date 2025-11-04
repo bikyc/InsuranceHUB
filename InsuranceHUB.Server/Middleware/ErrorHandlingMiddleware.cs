@@ -1,7 +1,4 @@
 ﻿using InsuranceHub.Shared.Enums;
-using InsuranceHub.Shared.Responses;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 namespace InsuranceHub.Api.Middleware
 {
@@ -71,8 +68,7 @@ namespace InsuranceHub.Api.Middleware
                 // Create ResponseMessage using the new Failed() overload that accepts data
                 var response = ResponseMessage<object>.Failed(
                     message: message,
-                    status: status,
-                    data: errorDetails
+                    result: errorDetails
                 );
 
                 context.Response.ContentType = "application/json";

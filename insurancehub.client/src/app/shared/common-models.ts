@@ -1,5 +1,5 @@
-export class DanpheHTTPResponse {
-  public Status: string = "";
-  public ErrorMessage: string = "";
-  public Results: any = null;
+export class InsHTTPResponse {
+  public Status = "";
+  public ErrorMessage = "";
+  public Result: any = null;
 }

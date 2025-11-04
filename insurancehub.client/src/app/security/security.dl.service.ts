@@ -1,16 +1,17 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SecurityDLService {
     public options = {
         headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
     };
 
-    constructor(public http: HttpClient) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { 
     }
        public GetAllValidRouteList() {
-        return this.http.get<any>("/api/Security/NavigationRoutes", this.options);
-
+        return this.http.get<any>(`${this.baseUrl}/api/Security/NavigationRoutes`, this.options);
     }
 }

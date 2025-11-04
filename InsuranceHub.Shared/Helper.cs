@@ -1,6 +1,4 @@
-﻿using InsuranceHub.Shared.Responses;
-using Newtonsoft.Json;
-using System.Xml;
+﻿using Newtonsoft.Json;
 
 namespace InsuranceHub.Api.Helpers
 {

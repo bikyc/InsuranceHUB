@@ -1,5 +1,6 @@
 ﻿namespace InsuranceHub.Shared.Enums
 {
+    // Numeric HTTP-like status codes
     public enum ResponseStatus
     {
         Success = 200,
@@ -11,9 +12,10 @@
         Failed = 501,
     }
 
-    public enum ResponseMessageStatus
+    // String-based business-level status for frontend
+    public static class ENUM_ResponseStatus
     {
-        Ok,
-        Failed
+        public static readonly string Ok = "Ok";
+        public static readonly string Failed = "Failed";
     }
 }

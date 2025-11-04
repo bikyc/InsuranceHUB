@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using InsuranceHub.Application.Interfaces;
 using InsuranceHub.Domain.Interfaces;
-using InsuranceHub.Shared.Enums;
-using InsuranceHub.Shared.Responses;
 using InsuranceHUB.Domain.Models.HIB;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -30,7 +28,7 @@ public class HIBService : IHIBService
     public async Task<ResponseMessage<GetEligibilityApiResponse>> GetPatientEligibilityAsync(string nshiNumber)
     {
         if (string.IsNullOrEmpty(nshiNumber))
-            return ResponseMessage<GetEligibilityApiResponse>.Failed("NSHI number is required", ResponseStatus.BadRequest);
+            return ResponseMessage<GetEligibilityApiResponse>.Failed("NSHI number is required");
 
         try
         {
@@ -49,21 +47,21 @@ public class HIBService : IHIBService
             var responseJson = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return ResponseMessage<GetEligibilityApiResponse>.Failed($"Eligibility request failed: {response.StatusCode}", ResponseStatus.InternalServerError);
+                return ResponseMessage<GetEligibilityApiResponse>.Failed($"Eligibility request failed: {response.StatusCode}");
 
             var eligibilityResponse = JsonConvert.DeserializeObject<GetEligibilityApiResponse>(responseJson);
             return ResponseMessage<GetEligibilityApiResponse>.Ok(eligibilityResponse, "Eligibility request successful");
         }
         catch (Exception ex)
         {
-            return ResponseMessage<GetEligibilityApiResponse>.Failed($"Eligibility request failed: {ex.Message}", ResponseStatus.InternalServerError);
+            return ResponseMessage<GetEligibilityApiResponse>.Failed($"Eligibility request failed: {ex.Message}");
         }
     }
 
     public async Task<ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>> GetPatientDetailsAsync(string nshiNumber)
     {
         if (string.IsNullOrEmpty(nshiNumber))
-            return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("NSHI number is required", ResponseStatus.BadRequest);
+            return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("NSHI number is required");
 
         try
         {
@@ -75,7 +73,7 @@ public class HIBService : IHIBService
             // Fetch patient details
             var patientResponse = await _httpClient.GetAsync($"Patient?identifier={nshiNumber}");
             if (!patientResponse.IsSuccessStatusCode)
-                return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("Failed to fetch patient details", ResponseStatus.InternalServerError);
+                return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("Failed to fetch patient details");
 
             var patientJson = await patientResponse.Content.ReadAsStringAsync();
             responseObj.PatientDetails = JsonConvert.DeserializeObject<GetPatientDetailsApiResponse>(patientJson);
@@ -91,7 +89,7 @@ public class HIBService : IHIBService
             var eligibilityResponse = await _httpClient.PostAsync("EligibilityRequest/", content);
 
             if (!eligibilityResponse.IsSuccessStatusCode)
-                return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("Eligibility request failed", ResponseStatus.InternalServerError);
+                return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed("Eligibility request failed");
 
             var eligibilityJson = await eligibilityResponse.Content.ReadAsStringAsync();
             responseObj.EligibilityResponse = JsonConvert.DeserializeObject<GetEligibilityApiResponse>(eligibilityJson);
@@ -100,7 +98,7 @@ public class HIBService : IHIBService
         }
         catch (Exception ex)
         {
-            return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed($"Error fetching patient details: {ex.Message}", ResponseStatus.InternalServerError);
+            return ResponseMessage<GetPatientDetailsAndEligibilityApiResponse>.Failed($"Error fetching patient details: {ex.Message}");
         }
     }
 

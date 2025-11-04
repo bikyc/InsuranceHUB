@@ -2,7 +2,6 @@
 using InsuranceHub.Application.Interfaces;
 using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Domain.Models.SSF;
-using InsuranceHub.Shared.Responses;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;

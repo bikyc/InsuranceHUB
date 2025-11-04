@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import { SecurityDLService } from "./security.dl.service";
 import { map, Observable } from "rxjs";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SecurityBLService {
 
     constructor(public securityDlService: SecurityDLService) {

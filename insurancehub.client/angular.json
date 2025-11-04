@@ -23,6 +23,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "lodash"
+            ],
             "outputPath": "dist/insurancehub.client",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -55,7 +58,10 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,
@@ -67,6 +73,14 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 60635,
+            "host": "127.0.0.1",
+            "ssl": true,
+            "sslCert": "C:/Users/Lenovo/AppData/Roaming/ASP.NET/https/insurancehub.client.pem",
+            "sslKey": "C:/Users/Lenovo/AppData/Roaming/ASP.NET/https/insurancehub.client.key",
+            "proxyConfig": "src/proxy.conf.js"
+          },
           "configurations": {
             "production": {
               "buildTarget": "insurancehub.client:build:production"
@@ -75,11 +89,7 @@
               "buildTarget": "insurancehub.client:build:development"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "proxyConfig": "src/proxy.conf.js",
-            "port": 60635
-          }
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -104,11 +114,23 @@
             "scripts": [],
             "karmaConfig": "karma.conf.js"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }

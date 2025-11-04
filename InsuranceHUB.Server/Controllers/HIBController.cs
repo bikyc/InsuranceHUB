@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using InsuranceHub.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using InsuranceHub.Application.Interfaces;
-using InsuranceHub.Shared.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InsuranceHub.Api.Controllers
 {
@@ -21,13 +19,13 @@ namespace InsuranceHub.Api.Controllers
         [HttpGet("checkeligibility")]
         public async Task<IActionResult> GetEligibility([FromQuery] string nshiNumber)
         {
-            return await InvokeHttpFunction(() => _hibService.GetPatientEligibilityAsync(nshiNumber));
+            return await InvokeHttpGetFunctionAsync(() => _hibService.GetPatientEligibilityAsync(nshiNumber));
         }
 
         [HttpGet("getpatientdetails")]
         public async Task<IActionResult> GetPatientDetails([FromQuery] string nshiNumber)
         {
-            return await InvokeHttpFunction(() => _hibService.GetPatientDetailsAsync(nshiNumber));
+            return await InvokeHttpGetFunctionAsync(() => _hibService.GetPatientDetailsAsync(nshiNumber));
         }
     }
 }

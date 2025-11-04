@@ -1,0 +1,101 @@
+
+top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55px;
+  background-color: #007bff;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.top-nav .app-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.top-nav a {
+  color: black;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.top-nav a:hover {
+  opacity: 0.8;
+}
+
+.top-nav a.active {
+  text-decoration: underline;
+}
+.organization-wrapper {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fafafa;
+  min-height: 80vh;
+}
+
+.select-title {
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.organization-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.organization-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #EEF;
+  border-radius: 40px;
+  box-shadow:0 11px 0px rgba(0, 0, 0, 0.1);
+  width: 280px;
+  padding: 30px 45px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.organization-card:hover {
+  transform: translateY(-3px);
+}
+
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #2979ff;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-inner {
+  width: 10px;
+  height: 10px;
+  background-color: #2979ff;
+  border-radius: 50%;
+}
+
+.org-name {
+  font-weight: 600;
+  color: #222;
+}
+
+.organization-card.selected {
+  border: 2px solid #2979ff;
+  box-shadow: 0 0 8px rgba(41, 121, 255, 0.3);
+}

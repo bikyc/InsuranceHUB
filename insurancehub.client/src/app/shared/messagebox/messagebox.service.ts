@@ -1,15 +1,4 @@
-/*File: messagebox.service.ts
-description: to show the messabox(popupmodal) after necessary actions/events
-             eg: success, error, alert, notification, warning, etc..
-created: 15June'17 Sudarshan
-Remarks: try to find a singleton implementation of it, i.e: declare it in AppMain.cshtml, and 
-         show/hide it using only this service.
-Change History:
-------------------------------------------------------------
-s.no.     user/date             changes          description/remarks
-------------------------------------------------------------
-1.     sudarshan/15Jun'17      created             NA
-------------------------------------------------------------*/
+
 import { Injectable } from '@angular/core';
 import { MessageboxModel } from './messagebox.model';
 
@@ -18,13 +7,13 @@ export class MessageboxService {
 
 
 
-  globalMsgbox: Array<MessageboxModel> = new Array<MessageboxModel>();
-  public defaultDisplayTime: number = 7000;//7000milliseconds=7seconds
+  globalMsgbox: MessageboxModel[] = [];
+  public defaultDisplayTime = 7000;//7000milliseconds=7seconds
 
   //default autoHide=true, for some cases user will have to manually close the messagebox.
 
-  public showMessage(status: string, messageArray: string[], errorLog: string = '', autoHide: boolean = true) {
-    var newMsg: MessageboxModel = new MessageboxModel();
+  public showMessage(status: string, messageArray: string[], errorLog = '', autoHide = true) {
+    const newMsg: MessageboxModel = new MessageboxModel();
     newMsg.message = messageArray;
     newMsg.status = status;
     newMsg.show = true;

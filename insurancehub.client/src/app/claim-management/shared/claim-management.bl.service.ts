@@ -1,9 +1,11 @@
-import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ClaimManagementDLService } from "./claim-management.dl.service";
-import { DanpheHTTPResponse } from "../../shared/common-models";
+import { InsHTTPResponse } from "../../shared/common-models";
+import { Injectable } from "@angular/core";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class ClaimManagementBLService {
 
@@ -11,7 +13,10 @@ export class ClaimManagementBLService {
     private claimManagementDLService: ClaimManagementDLService
   ) { }
 
-  GetRoutePermissions(): Observable<DanpheHTTPResponse> {
+  GetRoutePermissions(): Observable<InsHTTPResponse> {
     return this.claimManagementDLService.GetRoutePermissions();
+  }
+  GetCreditOrganizationList(): Observable<InsHTTPResponse> {
+    return this.claimManagementDLService.GetCreditOrganizationList();
   }
 }

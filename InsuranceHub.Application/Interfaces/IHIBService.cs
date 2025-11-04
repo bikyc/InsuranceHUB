@@ -1,5 +1,4 @@
-﻿using InsuranceHub.Shared.Responses;
-using static InsuranceHub.Application.Models.HIB.HIBApiResponses_Dto;
+﻿using static InsuranceHub.Application.Models.HIB.HIBApiResponses_Dto;
 
 namespace InsuranceHub.Application.Interfaces
 {

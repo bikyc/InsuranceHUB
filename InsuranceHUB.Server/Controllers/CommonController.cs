@@ -1,57 +1,53 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using InsuranceHub.Shared.Responses;
-using InsuranceHub.Api.Helpers;
-using InsuranceHub.Shared.Enums;
+﻿using InsuranceHub.Shared.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InsuranceHub.Api.Controllers
 {
     [ApiController]
-    public class CommonController : ControllerBase
+    public abstract class CommonController : ControllerBase
     {
-        protected IActionResult MapResponseStatus<T>(ResponseMessage<T> response)
+        protected IActionResult MapResponse<T>(ResponseMessage<T> response)
         {
-            var serialized = ApiResponseSerializer.SerializeResponse(response);
-
             return response.Status switch
             {
-                ResponseStatus.Success => Ok(serialized),
-                ResponseStatus.BadRequest => BadRequest(serialized),
-                ResponseStatus.NotFound => NotFound(serialized),
-                ResponseStatus.InternalServerError => StatusCode(500, serialized),
-                _ => StatusCode(500, serialized)
+                var s when s == ENUM_ResponseStatus.Ok => Ok(response),
+                var s when s == ENUM_ResponseStatus.Failed => BadRequest(response),
+                _ => StatusCode(500, response) // fallback
             };
         }
 
-        // Async
-        protected async Task<IActionResult> InvokeHttpFunction<T>(Func<Task<ResponseMessage<T>>> func)
+
+        protected IActionResult InvokeHttpGetFunction<T>(Func<T> func)
         {
             try
             {
-                var response = await func();
-                return MapResponseStatus(response);
+                var data = func();
+                var response = ResponseMessage<T>.Ok(data);
+                return MapResponse(response);
             }
             catch (Exception ex)
             {
-                var errorResponse = ResponseMessage<T>.Failed(
-                    ex.Message, ResponseStatus.InternalServerError);
-                return MapResponseStatus(errorResponse);
+                var response = ResponseMessage<T>.Failed(ex.Message);
+                return MapResponse(response);
             }
         }
 
-        // Sync
-        protected IActionResult InvokeHttpFunction<T>(Func<ResponseMessage<T>> func)
+        protected async Task<IActionResult> InvokeHttpGetFunctionAsync<T>(Func<Task<T>> func)
         {
             try
             {
-                var response = func();
-                return MapResponseStatus(response);
+                var data = await func();
+                var response = ResponseMessage<T>.Ok(data);
+                return MapResponse(response);
             }
             catch (Exception ex)
             {
-                var errorResponse = ResponseMessage<T>.Failed(
-                    ex.Message, ResponseStatus.InternalServerError);
-                return MapResponseStatus(errorResponse);
+                var response = ResponseMessage<T>.Failed(ex.Message);
+                return MapResponse(response);
             }
         }
+
+        // Later, you can add similar methods for POST/PUT/DELETE
+        // e.g., InvokeHttpPostFunctionAsync, InvokeHttpPutFunctionAsync, etc.
     }
 }

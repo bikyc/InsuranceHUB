@@ -43,7 +43,7 @@ export class AppComponent {
   logError(err: any) {
     console.log(err);
   }
-GenerateSearchableRoutes(routes: ClaimRoutes[], parentPath: string = '', parentLabel: string = '') {
+GenerateSearchableRoutes(routes: ClaimRoutes[], parentPath = '', parentLabel = '') {
     routes.forEach(route => {
 
       const pathlable = parentLabel ? `${parentLabel} > ${route.DisplayName}` : route.DisplayName;

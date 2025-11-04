@@ -3,8 +3,10 @@ using InsuranceHub.Application.Mappings;
 using InsuranceHub.Application.Services;
 using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Infrastructure.Persistence;
+using InsuranceHub.Infrastructure.Persistence.Repository;
 using InsuranceHub.Infrastructure.Services.Cache;
 using InsuranceHUB.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,19 +22,14 @@ namespace InsuranceHub.Server.DependencyInjection
     {
         public static IServiceCollection AddInsuranceHubInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // -----------------------------
-            // DbContexts
-            // -----------------------------
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<CoreDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<InsuranceDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // -----------------------------
-            // UnitOfWork
-            // -----------------------------
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<CoreDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<InsuranceDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ClaimManagementDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<RbacDbContext>(options => options.UseSqlServer(connectionString));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
@@ -40,91 +37,56 @@ namespace InsuranceHub.Server.DependencyInjection
 
         public static IServiceCollection AddInsuranceHubApplication(this IServiceCollection services, IConfiguration configuration)
         {
-            // -----------------------------
-            // Application Services
-            // -----------------------------
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IHIBService, HIBService>();
+            services.AddScoped<IClaimManagementService, ClaimManagementService>();
+            services.AddScoped<ISecurityService, SecurityService>();
+            services.AddScoped<IClaimManagementRepository, ClaimManagementRepository>();
+            services.AddScoped<IRbacRepository, RbacRepository>();
 
-            // -----------------------------
-            // AutoMapper
-            // -----------------------------
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddHttpClient();
+
             return services;
         }
 
         public static IServiceCollection AddInsuranceHubApi(this IServiceCollection services, IConfiguration configuration)
         {
-            // -----------------------------
-            // Controllers + JSON
-            // -----------------------------
             services.AddControllers()
-                .AddNewtonsoftJson(opts =>
-                    opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                .AddJsonOptions(options =>
+                {
+                    // Preserve property names as they are in C# (PascalCase)
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    options.JsonSerializerOptions.DictionaryKeyPolicy = null;
+                });
 
-            // -----------------------------
-            // Swagger
-            // -----------------------------
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "InsuranceHub API", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Enter JWT token like: Bearer <token>"
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
             });
 
-            // -----------------------------
-            // JWT Authentication
-            // -----------------------------
-            services.AddJwtAuthentication(configuration);
+            // Dummy authentication scheme for now
+            services.AddAuthentication("UserIdAuth")
+                .AddScheme<AuthenticationSchemeOptions, UserIdAuthHandler>("UserIdAuth", null);
 
-            // -----------------------------
-            // CORS
-            // -----------------------------
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowDanphe", policy =>
                 {
-                    var origins = configuration.GetSection("AllowedOrigins")
-                        .Get<string[]>()
-                        ?? new[]
-                        {
-                            "https://localhost:44333",
-                            "https://localhost:7047",
-                            "http://localhost:5012",
-                            "http://localhost:6064",
-                            "http://localhost:56326"
-                        };
-
-                    policy.WithOrigins(origins)
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
+                    policy.WithOrigins(
+                            "https://localhost:60635",
+                            "https://localhost:4200",
+                            "http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
             services.AddMemoryCache();
             services.AddScoped<ICacheService, MemoryCacheService>();
-            return services;
 
+            return services;
         }
-    }
+}
 }

@@ -1,16 +1,14 @@
-﻿using InsuranceHub.Domain.Interfaces;
-using InsuranceHub.Domain.Models;
+﻿using InsuranceHub.Domain.Models;
 using InsuranceHub.Domain.Models.RBAC;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceHub.Infrastructure.Persistence
 {
     public class RbacDbContext : DbContext
     {
-        public RbacDbContext(string connString) : base(connString)
+        public RbacDbContext(DbContextOptions<RbacDbContext> options)
+            : base(options)
         {
-            this.Configuration.LazyLoadingEnabled = true;
-            this.Configuration.ProxyCreationEnabled = false;
         }
 
         public DbSet<RbacApplication> Applications { get; set; }
@@ -21,11 +19,8 @@ namespace InsuranceHub.Infrastructure.Persistence
         public DbSet<RolePermissionMap> RolePermissionMaps { get; set; }
         public DbSet<InsHubRoute> Routes { get; set; }
         public DbSet<EmployeeModel> Employees { get; set; }
-        //public DbSet<RbacPolicy> RbacPolicies { get; set; }
-        //public DbSet<RbacPolicyRoleMapping> RbacPolicyRoleMappings { get; set; }
 
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RbacApplication>().ToTable("RBAC_Application");
             modelBuilder.Entity<RbacPermission>().ToTable("RBAC_Permission");
@@ -35,11 +30,6 @@ namespace InsuranceHub.Infrastructure.Persistence
             modelBuilder.Entity<RbacUser>().ToTable("RBAC_User");
             modelBuilder.Entity<UserRoleMap>().ToTable("RBAC_MAP_UserRole");
             modelBuilder.Entity<EmployeeModel>().ToTable("EMP_Employee");
-            //modelBuilder.Entity<RbacPolicy>().ToTable("RBAC_Policies");
-            //modelBuilder.Entity<RbacPolicyRoleMapping>().ToTable("RBAC_MAP_RolePolicy");
-
-
         }
     }
-
 }

@@ -4,17 +4,20 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SecurityBLService } from './security/security.bl.service';
+export const BASE_URL = 'https://localhost:30365';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [    { provide: 'BASE_URL', useValue: BASE_URL } 
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

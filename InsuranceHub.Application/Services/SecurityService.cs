@@ -3,9 +3,8 @@ using InsuranceHub.Domain.Interfaces;
 using InsuranceHub.Domain.Models;
 using InsuranceHub.Domain.Models.RBAC;
 using InsuranceHub.Shared.Enums;
-using InsuranceHub.Shared.Responses;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace InsuranceHub.Application.Services
 {
@@ -25,12 +24,28 @@ namespace InsuranceHub.Application.Services
 
             var response = new ResponseMessage<List<InsHubRoute>>
             {
-                Status = ResponseStatus.Success,
-                Data = routeList,
+                Status = ENUM_ResponseStatus.Ok,
+                Result = routeList,
                 Message = "Routes fetched successfully"
             };
 
             return await Task.FromResult(response);
         }
+        public RbacUser? GetCurrentUser(ClaimsPrincipal user)
+        {
+            var claim = user.Claims.FirstOrDefault(c => c.Type == "currentUser");
+            if (claim == null)
+                return null;
+
+            try
+            {
+                return JsonConvert.DeserializeObject<RbacUser>(claim.Value);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

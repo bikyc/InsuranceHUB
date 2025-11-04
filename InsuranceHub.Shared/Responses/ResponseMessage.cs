@@ -1,36 +1,29 @@
 ﻿using InsuranceHub.Shared.Enums;
 
-namespace InsuranceHub.Shared.Responses
+public class ResponseMessage<T>
 {
-    public class ResponseMessage<T>
+    // Status will be string, either "Ok" or "Failed"
+    public string Status { get; set; }
+    public string Message { get; set; }
+    public T Result { get; set; }
+
+    public static ResponseMessage<T> Ok(T result, string message = "Success")
     {
-        public ResponseStatus Status { get; set; }
-        public ResponseMessageStatus MessageStatus { get; set; }
-        public string Message { get; set; }
-
-        public T Data { get; set; }
-
-        public static ResponseMessage<T> Ok(T data, string message = "Success")
+        return new ResponseMessage<T>
         {
-            return new ResponseMessage<T>
-            {
-                Status = ResponseStatus.Success,
-                MessageStatus = ResponseMessageStatus.Ok,
-                Message = message,
-                Data = data
-            };
-        }
+            Status = ENUM_ResponseStatus.Ok,    
+            Message = message,
+            Result = result
+        };
+    }
 
-        public static ResponseMessage<T> Failed(string message, ResponseStatus status = ResponseStatus.Failed, T data = default)
+    public static ResponseMessage<T> Failed(string message, T result = default)
+    {
+        return new ResponseMessage<T>
         {
-            return new ResponseMessage<T>
-            {
-                Status = status,
-                MessageStatus = ResponseMessageStatus.Failed,
-                Message = message,
-                Data = data
-            };
-        }
-
+            Status = ENUM_ResponseStatus.Failed,
+            Message = message,
+            Result = result
+        };
     }
 }

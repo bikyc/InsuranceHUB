@@ -1,16 +1,16 @@
 export class CreditOrganization_DTO {
-  public OrganizationId: number = 0;
-  public OrganizationName: string = '';
-  public IsActive: string = '';
-  public CreatedOn: string = '';
-  public CreatedBy: number = 0;
-  public ModifiedOn: string = '';
-  public ModifiedBy: number = 0;
-  public IsDefault: boolean = false;
-  public IsClaimManagementApplicable: boolean = false;
-  public IsClaimCodeCompulsory: boolean = false;
-  public IsClaimCodeAutoGenerate: boolean = false;
-  public DisplayName: string = '';
-  public SchemeApiIntegrationName: string = '';
-  public IsAdditionalInformationRequired: boolean = false;
+  public OrganizationId = 0;
+  public OrganizationName = '';
+  public IsActive = '';
+  public CreatedOn = '';
+  public CreatedBy = 0;
+  public ModifiedOn = '';
+  public ModifiedBy = 0;
+  public IsDefault = false;
+  public IsClaimManagementApplicable = false;
+  public IsClaimCodeCompulsory = false;
+  public IsClaimCodeAutoGenerate = false;
+  public DisplayName = '';
+  public SchemeApiIntegrationName = '';
+  public IsAdditionalInformationRequired = false;
 }

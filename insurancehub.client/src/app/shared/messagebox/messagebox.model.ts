@@ -1,16 +1,5 @@
-﻿import {
-    NgForm,
-    FormGroup,
-    FormControl,
-    Validators,
-    FormBuilder
-} from '@angular/forms'
-
-export class MessageboxModel {
-    public show: boolean = false;
+﻿export class MessageboxModel {
+    public show = false;
     public message: string[] = [];
-    public status: string = '';
-    constructor() {
-
-    }
+    public status = '';
 }
