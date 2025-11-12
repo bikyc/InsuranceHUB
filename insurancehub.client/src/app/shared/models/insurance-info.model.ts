@@ -1,0 +1,29 @@
+export class InsuranceInfo {
+    public patientId: number=0;
+    public InsuranceNumber: string = '';
+    public InsuranceName: string = '';
+    public CardNumber: string = '';
+    public SubscriberFirstName: string = '';
+    public SubscriberLastName: string = '';
+    public SubscriberDOB: string = '';
+    public SubscriberGender: string = '';
+    public SubscriberIDCardNumber: string = '';
+    public SubscriberIDCardType: string = '';
+    public IMISCode: string= '';
+    public InitialBalance: number = 0;
+    public CurrentBalance: number = 0;
+    public InsuranceProviderId: number = 0;
+    public  Ins_HasInsurance: boolean=false;
+    public Ins_NshiNumber:string='';
+    public Ins_InsuranceBalance : number=0;
+    public Ins_InsuranceProviderId :number=0;
+    public Ins_IsFamilyHead:string='';
+    public Ins_FamilyHeadNshi :string='';
+    public Ins_FamilyHeadName:boolean=false;
+    public Ins_IsFirstServicePoint:boolean=false;
+    public CreatedOn: string = '';
+    public CreatedBy: number=0;
+    public ModifiedOn: string = '';
+    public ModifiedBy: number=0;
+    public InsuranceProviderName: string = '';
+}

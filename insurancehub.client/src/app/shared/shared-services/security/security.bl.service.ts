@@ -10,8 +10,8 @@ export class SecurityBLService {
     constructor(public securityDlService: SecurityDLService) {
 
     }
-public GetAllValidRouteList(): Observable<any> {
-    return this.securityDlService.GetAllValidRouteList()
+public GetAllValidRouteList(UserId:number): Observable<any> {
+    return this.securityDlService.GetAllValidRouteList(UserId)
       .pipe(
         map((res: any) => {
           return res;

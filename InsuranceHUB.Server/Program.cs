@@ -10,6 +10,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseCors("AllowDanphe");
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

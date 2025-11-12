@@ -6,7 +6,7 @@ namespace InsuranceHub.Application.Interfaces
 {
     public interface ISecurityService
     {
-        Task<ResponseMessage<List<InsHubRoute>>> NavigationRouteList(RbacUser currentUser);
+        Task<ResponseMessage<List<InsHubRoute>>> GetNavigationRoutesForUserAsync(int userId);
         RbacUser? GetCurrentUser(ClaimsPrincipal user);
 
     }

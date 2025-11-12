@@ -1,43 +1,47 @@
-<!-- 🟦 Permanent top navigation bar -->
-<nav class="top-nav">
-  <div class="nav-right">
-    <a *ngFor="let route of ValidRoutes"
-       [routerLink]="route.RouterLink"
+<!-- ⚪ Bottom Navigation Menu -->
+<nav *ngIf="isOrganizationActivated" class="bottom-nav">
+  <div class="nav-left">
+    <a *ngFor="let route of ValidRoutes" 
+       [routerLink]="route.RouterLink" 
        routerLinkActive="active">
-       {{ route.DisplayName }}
+      {{ route.DisplayName }}
     </a>
   </div>
+
+  <div class="nav-right active-org-section" style="display: flex; align-items: center; gap: 8px;">
+  <span class="label label-primary">
+    Active Organization: <b>{{ ActiveOrganization.DisplayName }}</b>
+  </span>
+  <button class="btn btn-sm btn-outline-light"
+          (click)="DeactivateOrganization()"
+          title="Change Organization">
+    Change
+    </button>
+  
+</div>
+
 </nav>
 
 <!-- Organization selection / activation area -->
-<!-- <div *ngIf="!isOrganizationActivated" class="organization-wrapper">
+<div *ngIf="!isOrganizationActivated" class="organization-wrapper">
   <h4 class="select-title">* Please select an insurance provider</h4>
 
   <div class="organization-grid">
-    <div
-      class="organization-card"
-      *ngFor="let org of ActiveOrganizationList"
-      (click)="ActivateOrganization(org)"
-      [class.selected]="ActiveOrganization && ActiveOrganization.OrganizationId === org.OrganizationId">
-      
+    <div class="organization-card" 
+         *ngFor="let org of ActiveOrganizationList" 
+         (click)="ActivateOrganization(org)"
+         [class.selected]="ActiveOrganization && ActiveOrganization.OrganizationId === org.OrganizationId">
+
       <div class="radio-circle">
-        <div class="radio-inner" *ngIf="ActiveOrganization && ActiveOrganization.OrganizationId === org.OrganizationId"></div>
+        <div class="radio-inner" 
+             *ngIf="ActiveOrganization && ActiveOrganization.OrganizationId === org.OrganizationId">
+        </div>
       </div>
+
       <span class="org-name">{{ org.OrganizationName }}</span>
     </div>
   </div>
-</div> -->
+</div>
 
-<!-- Active Organization Display -->
-<!-- <div *ngIf="isOrganizationActivated" class="active-org-section">
-  <span style="padding: 10px;" class="right">
-    <label class="label label-primary">
-      Active Organization : <b>{{ ActiveOrganization.DisplayName }}</b>
-    </label>
-    <i
-      (click)="DeactivateOrganization()"
-      style="cursor: pointer; margin-left: 5px; font-size: 20px; position: relative; top: 2px; left: 5px;"
-      class="fa fa-sign-out">
-    </i>
-  </span>
-</div> -->
+<!-- Router outlet for child components -->
+<router-outlet *ngIf="isOrganizationActivated"></router-outlet>

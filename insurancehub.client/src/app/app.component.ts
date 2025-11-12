@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ENUM_HTTPResponses } from './shared/shared-enums';
-import { SecurityBLService } from './security/security.bl.service';
-import { SecurityService } from './security/security.service';
-import { ClaimRoutes } from './security/routes.model';
+
 import { SearchableRoute } from './shared/DTOs/SearchableRoute.dto';
 import * as _ from "lodash";
+import { ActivatedRoute } from '@angular/router';
+import { ClaimRoutes } from './shared/shared-services/security/routes.model';
+import { SecurityBLService } from './shared/shared-services/security/security.bl.service';
+import { SecurityService } from './shared/shared-services/security/security.service';
 
 @Component({
   selector: 'app-root',
@@ -19,56 +21,62 @@ export class AppComponent {
   validRouteList: ClaimRoutes[] = [];
   filteredValidRoutes: ClaimRoutes[] = [];
   SearchableRoutes: SearchableRoute[] = [];
+  UserId: number=0;
 
   constructor(
     private securityBLService: SecurityBLService,
-    private securityService: SecurityService
+    private securityService: SecurityService,
+    private route: ActivatedRoute
   ) {
-    this.GetAllValidRouteList();
+    this.initializeUser();
   }
+
+  private initializeUser(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdFromQuery = urlParams.get('userId');
+    
+    if (userIdFromQuery) {
+      // User ID from URL - fresh login
+      this.UserId = +userIdFromQuery;
+      this.securityService.setCurrentUserId(this.UserId);
+      this.GetAllValidRouteList();
+    } else {
+      // Try to get from sessionStorage - page refresh or navigation
+      this.UserId = this.securityService.getCurrentUserId();
+      
+      if (this.UserId) {
+        // Check if we already have valid routes cached
+        this.validRoutes = this.securityService.GetAllValidRoutes();
+        
+        if (!this.validRoutes || this.validRoutes.length === 0) {
+          // Routes not cached, fetch them
+          this.GetAllValidRouteList();
+        } else {
+          // Routes are cached, no need to fetch
+          console.log('Using cached valid routes');
+        }
+      } else {
+        console.warn('No user ID found. User may need to login.');
+      }
+    }
+  }
+
   GetAllValidRouteList(): void {
-    this.securityBLService.GetAllValidRouteList()
+    this.securityBLService.GetAllValidRouteList(this.UserId)
       .subscribe(res => {
         if (res.Status === ENUM_HTTPResponses.OK) {
-          this.securityService.validRouteList = res.Results;
+          this.securityService.setValidRoutes(res.Result);
           this.validRoutes = this.securityService.GetAllValidRoutes();
-          this.filteredValidRoutes = _.cloneDeep(this.validRoutes);
-          this.GenerateSearchableRoutes(this.filteredValidRoutes);
+          // this.filteredValidRoutes = _.cloneDeep(this.validRoutes);
+          // this.GenerateSearchableRoutes(this.filteredValidRoutes);
         }
       },
         err => {
           this.logError(err.ErrorMessage);
         });
   }
+
   logError(err: any) {
     console.log(err);
-  }
-GenerateSearchableRoutes(routes: ClaimRoutes[], parentPath = '', parentLabel = '') {
-    routes.forEach(route => {
-
-      const pathlable = parentLabel ? `${parentLabel} > ${route.DisplayName}` : route.DisplayName;
-      const pathParts = route.UrlFullPath.split('/').filter(part => part); // ignore empty strings
-      let routeType: 'menu' | 'submenu' | 'page';
-
-      if (pathParts.length === 1) {
-        routeType = 'menu';
-      } else if (pathParts.length === 2) {
-        routeType = 'submenu';
-      } else {
-        routeType = 'page';
-      }
-
-      this.SearchableRoutes.push({
-        DisplayName: route.DisplayName,
-        FullPath: route.UrlFullPath,
-        PathLable: pathlable,
-        RouteType: routeType,
-        RouteDescription: route.RouteDescription
-      });
-
-      if (route.ChildRoutes && route.ChildRoutes.length > 0) {
-        this.GenerateSearchableRoutes(route.ChildRoutes, pathlable);
-      }
-    });
   }
 }

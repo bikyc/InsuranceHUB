@@ -2,7 +2,9 @@
 import { Injectable } from '@angular/core';
 import { MessageboxModel } from './messagebox.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MessageboxService {
 
 

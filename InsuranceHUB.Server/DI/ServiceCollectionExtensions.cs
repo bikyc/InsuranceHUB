@@ -7,14 +7,11 @@ using InsuranceHub.Infrastructure.Persistence.Repository;
 using InsuranceHub.Infrastructure.Services.Cache;
 using InsuranceHUB.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Text;
 
 namespace InsuranceHub.Server.DependencyInjection
 {
@@ -31,19 +28,37 @@ namespace InsuranceHub.Server.DependencyInjection
             services.AddDbContext<RbacDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRbacRepository, RbacRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddInsuranceHubApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Services
             services.AddScoped<IHIBService, HIBService>();
             services.AddScoped<IClaimManagementService, ClaimManagementService>();
             services.AddScoped<ISecurityService, SecurityService>();
-            services.AddScoped<IClaimManagementRepository, ClaimManagementRepository>();
-            services.AddScoped<IRbacRepository, RbacRepository>();
 
+            // Repository already registered in Infrastructure
+            // Cache service
+            services.AddMemoryCache();
+            services.AddScoped<ICacheService, MemoryCacheService>();
+
+            // Register RbacService with explicit cacheExpiryMinutes
+            services.AddScoped<IRbacService>(sp =>
+                new RbacService(
+                    sp.GetRequiredService<IRbacRepository>(),
+                    sp.GetRequiredService<ICacheService>(),
+                    cacheExpiryMinutes: 60 // positive value to avoid MemoryCache error
+                ));
+
+            services.AddScoped<IClaimManagementRepository, ClaimManagementRepository>();
+
+            // AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
+
+            // HttpClient
             services.AddHttpClient();
 
             return services;
@@ -54,7 +69,7 @@ namespace InsuranceHub.Server.DependencyInjection
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // Preserve property names as they are in C# (PascalCase)
+                    // Preserve property names (PascalCase)
                     options.JsonSerializerOptions.PropertyNamingPolicy = null;
                     options.JsonSerializerOptions.DictionaryKeyPolicy = null;
                 });
@@ -69,6 +84,7 @@ namespace InsuranceHub.Server.DependencyInjection
             services.AddAuthentication("UserIdAuth")
                 .AddScheme<AuthenticationSchemeOptions, UserIdAuthHandler>("UserIdAuth", null);
 
+            // CORS
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowDanphe", policy =>
@@ -83,10 +99,17 @@ namespace InsuranceHub.Server.DependencyInjection
                 });
             });
 
-            services.AddMemoryCache();
-            services.AddScoped<ICacheService, MemoryCacheService>();
+            // Session
+            services.AddHttpContextAccessor();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(8);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             return services;
         }
-}
+    }
 }

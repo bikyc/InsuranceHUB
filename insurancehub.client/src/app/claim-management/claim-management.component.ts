@@ -1,11 +1,11 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { CreditOrganization_DTO } from './shared/DTOs/CreditOrganization_DTO';
+import { CreditOrganization_DTO } from '../shared/DTOs/credit-organization.dto';
 import { ClaimManagementService } from './shared/claim-management.service';
 import { ClaimManagementBLService } from './shared/claim-management.bl.service';
-import { SecurityService } from '../security/security.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { InsHTTPResponse } from '../shared/common-models';
+import { SecurityService } from '../shared/shared-services/security/security.service';
 
 @Component({
   selector: 'app-claim-management',
@@ -19,6 +19,7 @@ export class ClaimManagementComponent implements OnInit {
   public ActiveOrganizationList: CreditOrganization_DTO[] = [];
   public ActiveOrganization: CreditOrganization_DTO = new CreditOrganization_DTO();
   public ValidRoutes: any[] = [];
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -28,41 +29,30 @@ export class ClaimManagementComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.handleSsoFromDanphe();   
-    this.loadCreditOrganizations();
     this.GetValidRoutes();
+    this.loadCreditOrganizations();
+    this.restoreActiveOrganization();
   }
+
   private GetValidRoutes(): void {
-    this.ValidRoutes = this.securityService.GetAllValidRoutes();
+    const cachedRoutes = this.securityService.GetAllValidRoutes();
+    if (cachedRoutes && cachedRoutes.length > 0) {
+      this.ValidRoutes = cachedRoutes;
+    }
+
+    this.securityService.validRouteList$.subscribe(routes => {
+      if (routes && routes.length > 0) {
+        this.ValidRoutes = routes;
+      }
+    });
   }
-  // private handleSsoFromDanphe(): void {
-  //   this.route.queryParams.subscribe(params => {
-  //     const token = params['token'];
-  //     const userId = params['userId'];
-
-  //     if (token && userId) {
-  //       localStorage.setItem('loginJwtToken', token);
-  //       localStorage.setItem('currentUserId', userId);
-  //       this.securityService.SetLoggedInUserFromToken(token);
-
-  //       // Remove token from address bar
-  //       this.router.navigate(['/ClaimManagement'], {
-  //         replaceUrl: true,
-  //         queryParams: {}
-  //       });
-
-  //       console.log('SSO login successful');
-  //     }
-  //   });
-  // }
 
   private loadCreditOrganizations(): void {
     this.claimBL.GetCreditOrganizationList().subscribe({
       next: (res: InsHTTPResponse) => {
-        if (res.Status === "Ok" && res.Result?.length) {
-          this.ActiveOrganizationList = res.Result;
-          // this.isOrganizationActivated = true;
-          // this.claimService.SetActiveOrganization(this.ActiveOrganizationList);
+        if (res.Status === "Ok" && res.Results?.length) {
+          this.ActiveOrganizationList = res.Results;
+          this.restoreActiveOrganization();
         } else {
           this.isOrganizationActivated = false;
           console.warn('No credit organizations returned');
@@ -75,15 +65,33 @@ export class ClaimManagementComponent implements OnInit {
     });
   }
 
-  ActivateOrganization(org: any) {
+  private restoreActiveOrganization(): void {
+    const storedOrg = this.claimService.getActiveOrganization();
+    
+    if (storedOrg && this.ActiveOrganizationList.length > 0) {
+      const orgExists = this.ActiveOrganizationList.some(
+        org => org.OrganizationId === storedOrg.OrganizationId
+      );
+      
+      if (orgExists) {
+        this.ActiveOrganization = storedOrg;
+        this.isOrganizationActivated = true;
+      } else {
+        // Organization no longer exists, clear it
+        this.claimService.clearActiveOrganization();
+      }
+    }
+  }
+
+  ActivateOrganization(org: CreditOrganization_DTO) {
     this.ActiveOrganization = org;
     this.isOrganizationActivated = true;
-    // optionally save to service if needed
-    // this.claimService.SetActiveOrganization(org);
+    this.claimService.setActiveOrganization(org);
   }
 
   DeactivateOrganization() {
-    this.isOrganizationActivated = false;
     this.ActiveOrganization = new CreditOrganization_DTO();
+    this.isOrganizationActivated = false;
+    this.claimService.clearActiveOrganization();
   }
 }

@@ -1,0 +1,50 @@
+import { ENUM_Deposit_OrganizationOrPatient } from "../shared-enums";
+import { EmployeeCashTransaction } from "./employee-cash-transaction.model";
+
+
+export class BillingDeposit {
+  public DepositId: number = 0;
+  public PatientVisitId: number = 0;
+  public PatientId: number = 0;
+  public BillingTransactionId: number = 0;
+  public TransactionType: string = "";
+  public InAmount: number = 0;
+  public OutAmount: number = 0;
+  public DepositHeadId: number = 0;
+  public CreditOrganizationId: number = 0;
+  public ModuleName: string = 'Billing'; 
+  public OrganizationOrPatient: string = ENUM_Deposit_OrganizationOrPatient.Patient;
+  public Remarks: string = "";
+  public CreatedBy: number = 0;
+  public CreatedOn: string = "";
+  public FiscalYearId: number = 0;
+  public ReceiptId: number = 0;
+  public CounterId: number = 0;
+  public PrintCount: number = 0;
+  public PaymentMode: string = 'cash';
+  public PaymentDetails: string = "";
+  public FiscalYear: string = ""; 
+  public BillingUser: string = "";
+  public DepositBalance: number = 0;
+  public CareOf: string = ""; 
+  public PatientName: string = "";
+  public PatientCode: string = "";
+  public IsDuplicatePrint: boolean = false;
+  public Address: string = "";
+  public CountrySubDivisionName: string = "";
+  public MunicipalityName: string = "";
+  public CountryName: string = "";
+  public WardNumber: number = 0;
+  public PhoneNumber: string = "";
+  public ReceiptNo: number=0;
+  public IsActive: boolean = true;
+  public InpatientpNumber: string = "";
+  public AdmissionCase: string = "";
+  public AdmissionDate: string = "";
+  public VisitType: string = "";
+  public CareOfContact: string = "";
+  public DepositorName: string = "";
+  public DepositorContact: string = "";
+  public empCashTransactionModel: Array<EmployeeCashTransaction> = new Array<EmployeeCashTransaction>();
+  public SelectedDepositId: number = 0;
+}

@@ -1,0 +1,54 @@
+import moment from "moment";
+import { ENUM_DateTimeFormat } from "../shared-enums";
+
+export class LabTestRequisition {
+  public RequisitionId: number = 0;
+  public PatientId: number = 0;
+  public PatientVisitId: number = 0;
+  public PrescriberId: number = 0;
+  public LabTestId: number = 0;
+  public ProcedureCode: string = "";
+  public LOINC: string = "";
+  public LabTestName: string = "";
+  public LabTestSpecimen: string = "";
+  public LabTestSpecimenSource: string = "";
+  public PatientName: string = "";
+  public Diagnosis: string = "";
+  public Urgency: string = "Normal";
+  public OrderDateTime: string = "";
+  public PrescriberName: string = ""; 
+  public BillingStatus: string = "";
+  public OrderStatus: string = "";
+  public SampleCode: string = "";
+  public RequisitionRemarks: string = "";
+  public CreatedBy: number = 0;
+  public CreatedOn: string = moment().format(ENUM_DateTimeFormat.Year_Month_Day_Hour_Minute);
+  public SampleCreatedBy: number = 0;
+  public SampleCreatedOn: string = "";
+  public SampleCollectedOnDateTime: string = "";
+  public Comments: string = "";
+  public ReportTemplateId: number = 0;
+  public RunNumberType: string = "";
+  public BillCancelledBy: number = 0;
+  public BillCancelledOn: string = "";
+  public LabTypeName: string = "";
+  public DiagnosisId: number = 0;
+  public VisitType: string = "";
+  public LabReportId: number = 0;
+  public WardName: string = "";
+  public IsActive: boolean = true;
+  public IsVerified: boolean = false;
+  public VerifiedBy: number = 0;
+  public VerifiedOn: string = "";
+  public ResultingVendorId: number = 0;
+  public HasInsurance: boolean = false;
+  public IsSmsSend: boolean = false;
+  public IsSelected: boolean = false;
+  public ServiceItemId: number = 0;
+  public SampleReceivedOn: string = "";
+  public IsPreVerified: boolean = false;
+  public PreVerifiedBy: number = 0;
+  public PreVerifiedOn: string = "";
+  public CreatedDay: string = moment().format(ENUM_DateTimeFormat.Year_Month_Day_Hour_Minute);
+}
+

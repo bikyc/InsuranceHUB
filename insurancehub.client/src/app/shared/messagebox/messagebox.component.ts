@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { Input } from "@angular/core"
+import { Component, Input } from '@angular/core';
 import { MessageboxService } from './messagebox.service';
 
 @Component({

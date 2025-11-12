@@ -15,5 +15,7 @@ namespace InsuranceHub.Application.Interfaces
         Task<List<RolePermissionMap>> GetAllRolePermissionMapsAsync();
         Task<List<RbacApplication>> GetAllApplicationsAsync();
         Task<List<InsHubRoute>> GetAllRoutesAsync();
+        Task<ResponseMessage<List<InsHubRoute>>> GetNavigationRoutesForUserAsync(int userId, bool getHierarchy = true);
+
     }
 }

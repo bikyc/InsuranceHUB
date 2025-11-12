@@ -1,0 +1,104 @@
+import moment from "moment";
+import { EmployeeCashTransaction } from "./employee-cash-transaction.model";
+import { ENUM_BillPaymentMode, ENUM_VisitType } from "../shared-enums";
+import { BillingTransactionCreditStatus } from "./billing-transaction-credit-status.model";
+import { BillingTransactionItem } from "./billing-transaction-items.model";
+
+export class BillingTransaction {
+  public BillingTransactionId: number = 0;
+  public PatientId: number = 0;
+  public PatientVisitId: number = 0;
+  public Patient: any = null;
+  public CounterId: number = 0;
+  public PaidDate: string = "";
+  public TransactionType: string = "";
+  public InvoiceType: string = "";
+  public TotalQuantity: number = 0;
+  public SubTotal: number = 0;
+  public DiscountPercent: number = 0;
+  public DiscountAmount: number = 0;
+  public TaxTotal: number = 0;
+  public TotalAmount: number = 0;
+  public PaidAmount: number = 0;
+  public DepositAmount: number = 0;
+  public DepositAvailable: number = 0;
+  public DepositUsed: number = 0;
+  public DepositReturnAmount: number = 0;
+  public DepositBalance: number = 0;
+  public Remarks: string = "";
+  public Tender: number = 0;
+  public Change: number = 0;
+  public CreatedBy: number = 0;
+  public CreatedOn: string = Date();
+  public ReturnRemarks: string = "";
+  public PrintCount: number = 0;
+  public PrintedOn: string = "";
+  public PrintedBy: number = 0;
+  public CreditBalance: number = 0;
+  public CreditNoteNumber: number = 0;
+  public ReturnedAmount: number = 0;
+  public BillingTransactionItems: Array<BillingTransactionItem> = new Array<BillingTransactionItem>();
+  public PaymentMode: string = "cash";
+  public PaymentDetails: string = "";
+  public BillStatus: string = "";
+  public FiscalYearId: number = 0;
+  public InvoiceNo: number = 0;
+  public InvoiceNumber: number = 0; 
+  public FiscalYear: string = "";
+  public TaxId: number = 0;
+  public InvoiceCode: string = "";
+  public TaxableAmount: number = 0;
+  public ReturnStatus: boolean = false;
+  public IsSelected: boolean = false;
+
+  public NonTaxableAmount: number = 0;
+  public PaymentReceivedBy: number = 0;
+  public PaidCounterId: number = 0;
+  public IsCopyReceipt: boolean = false; 
+  public IsInsuranceBilling: boolean = false;
+  public IsInsuranceClaimed: boolean = false;
+  public InsuranceClaimedDate: string = "";
+  public InsuranceProviderId: number = 0;
+  public PackageId: number = 0;
+  public PackageName: string = "";
+  public OrganizationId: number = 0;
+  public OrganizationName: string = "";
+  public ExchangeRate: number = 0; 
+  public singleReceiptBool: boolean = false;
+  public BillingUserName: string = ""; 
+  public InsTransactionDate: string = "";
+  public AdjustmentTotalAmount: number = 0;
+  public ReturnedItems: any;
+  public Ins_NshiNumber: string = '';
+
+  public LabTypeName: string = '';
+  public ClaimCode: number = 0;
+
+  public NetAmount: number = 0;
+  public isSelected: boolean = true; 
+  public BillReturnIdsCSV: any[] = [];
+  public ModuleName: any = null;
+  public EmployeeCashTransaction: Array<EmployeeCashTransaction> = new Array<EmployeeCashTransaction>();
+
+  public ReceivedAmount: number = 0;
+  public CoPayment_PaymentMode: string = ENUM_BillPaymentMode.credit;
+  public IsCoPayment: boolean = false;
+  public CoPaymentCreditAmount: number = 0;
+  public BillingTxnCreditStatus: Array<BillingTransactionCreditStatus> = new Array<BillingTransactionCreditStatus>();
+  public PatientMapPriceCategoryId: number = 0;
+  public PriceCategoryId: number = 0;
+  public IsMedicarePatientBilling: boolean = false;
+  public SchemeId: number = 0;
+  public MemberNo: string = "";
+  public SalesAmount: number = 0;
+  public ReturnAmount: number = 0;
+  public InvoiceDate: string = '';
+  public InvoiceOf: string = ''; 
+  public VisitType: string = ENUM_VisitType.outpatient;
+  public OtherCurrencyDetail: string = "";
+  public IsProvisionalDischargeCleared: boolean = false;
+  public CoPaymentCashPercent: number = 0;
+  constructor() {
+    this.CreatedOn = moment().format("YYYY-MM-DD HH:mm:ss");
+  }
+}

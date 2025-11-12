@@ -1,0 +1,34 @@
+export class Appointment {
+  public AppointmentId: number = 0;
+  public PatientId: number = 0;
+  public FirstName: string = "";
+  public MiddleName: string = "";
+  public LastName: string = "";
+  public Gender: string = "";
+  public Age: string = '';
+  public AgeUnit: string = 'Y';
+  public ContactNumber: string = "";
+  public AppointmentDate: string = "";
+  public AppointmentTime: string = "";
+  public PerformerId: number=0; 
+  public PerformerName: string = ''; 
+  public AppointmentType: string = "";
+  public PatientType: string = "outpatient";
+  public AppointmentStatus: string = "";
+  public ModifiedOn: string = "";
+  public ModifiedBy: number=0;
+  public CreatedOn: string = "";
+  public CreatedBy: number=0;
+  public CancelledOn: string = "";
+  public IsDobVerified: boolean = false;
+  public CancelledBy: number=0;
+  public CancelledRemarks: string = '';
+  public DepartmentId: number=0;
+  public DepartmentName: string = ''; 
+  public DoctorName: string = '';
+  public Reason: string = "";
+  public AppointmentList: any = null;
+  public IsValidSelDepartment: boolean = true; 
+  public IsValidSelProvider: boolean = true;
+  public DOB: string = '';  
+}

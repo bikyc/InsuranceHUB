@@ -1,40 +1,63 @@
-
-top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* ⚪ Bottom navigation bar */
+.bottom-nav {
+  background-color: #fff;
   width: 100%;
-  height: 55px;
-  background-color: #007bff;
-  color: black;
   display: flex;
+  justify-content: space-between; /* Spread routes left, org info right */
   align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 20px;
+  position: sticky;
+  top: 55px;
+  z-index: 999;
+  margin-top: -15px;
+  font-family: sans-serif;
 }
 
-.top-nav .app-title {
-  font-size: 18px;
+/* Left side: routes */
+.bottom-nav .nav-left {
+  display: flex;
+  gap: 25px;
+}
+
+.bottom-nav a {
+  color: black;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.bottom-nav a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.bottom-nav a.active {
+  background-color: #007bff;
+  color: white;
   font-weight: 600;
 }
 
-.top-nav a {
-  color: black;
-  text-decoration: none;
-  margin-left: 20px;
-  font-weight: 500;
-  transition: opacity 0.2s;
+/* Right side: Active organization */
+.active-org-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
 }
 
-.top-nav a:hover {
-  opacity: 0.8;
+.active-org-section .label-primary {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
-.top-nav a.active {
-  text-decoration: underline;
-}
+/* 🟦 Organization selection area */
 .organization-wrapper {
   text-align: center;
   padding: 40px 20px;
@@ -50,7 +73,7 @@ top-nav {
 
 .organization-grid {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 25px;
 }
@@ -58,14 +81,13 @@ top-nav {
 .organization-card {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  background: #EEF;
+  background: #eef;
   border-radius: 40px;
-  box-shadow:0 11px 0px rgba(0, 0, 0, 0.1);
-  width: 280px;
-  padding: 30px 45px;
+  width: 260px;
+  padding: 20px 30px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .organization-card:hover {

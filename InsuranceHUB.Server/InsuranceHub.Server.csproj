@@ -28,9 +28,7 @@
     <ItemGroup>
       <SpaFiles Include="$(SpaRoot)\dist\insurancehub.client\browser\**\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(SpaFiles)"
-          DestinationFiles="@(SpaFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')"
-          SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SpaFiles)" DestinationFiles="@(SpaFiles->'wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Message Text="Angular copied to wwwroot" Importance="high" />
   </Target>
 

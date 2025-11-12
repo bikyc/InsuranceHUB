@@ -1,0 +1,32 @@
+import moment from 'moment';
+import { ENUM_DateTimeFormat } from '../shared-enums';
+export class Vitals {
+    public PatientVitalId: number = 0;
+    public PatientVisitId: number = 0;
+    public DateTime: string = '';
+    public Height: number=0;
+    public HeightUnit: string = "cm";
+    public Weight: number=0;
+    public WeightUnit: string = "kg";
+    public BMI: number=0;
+    public Temperature: number=0;
+    public TemperatureUnit: string = "F";
+    public Pulse: number=0;
+    public BPSystolic: number=0;
+    public BPDiastolic: number=0;
+    public RespiratoryRatePerMin: string = '';
+    public SpO2: number=0;
+    public OxygenDeliveryMethod: string = '';
+    public PainScale: number=0;
+    public BodyPart: string = '';
+    public Eyes: string = '';
+    public Verbal: string = '';
+    public Motor: string = '';
+    public GCS: string = '';
+    public CreatedBy: number=0;
+    public ModifiedBy: number=0;
+    public Remarks: string = '';
+    public CreatedOn: string = moment().format(ENUM_DateTimeFormat.Year_Month_Day_Hour_Minute);
+    public ModifiedOn: string = '';
+    public VitalsTakenOn: string = moment().format(ENUM_DateTimeFormat.Year_Month_Day_Hour_Minute);
+}
