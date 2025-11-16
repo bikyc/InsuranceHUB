@@ -10,4 +10,17 @@ export class PharmacyBLService {
         return this.pharmacyDLService.GetPatients(searchTxt, isInsurance)
             .pipe(map(res => { return res }));
     }
+    public PutPrintCount(printCount: number, invoiceId: number) {
+        return this.pharmacyDLService.PutPrintCount(printCount, invoiceId)
+            .pipe(map(res => { return res }));
+    }
+    public GetSaleReturnInvoiceItemsByInvoiceRetId(invoiceReturnId: number) {
+        try {
+            return this.pharmacyDLService.GetSaleReturnInvoiceItemsByInvoiceRetId(invoiceReturnId)
+                .pipe(map(res => { return res }));
+        }
+        catch (ex) {
+            throw ex;
+        }
+    }
 }

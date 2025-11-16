@@ -63,3 +63,18 @@ export enum ENUM_DateRangeName {
   ThreeMonth = "last3month",
   SixMonth = "last6month"
 }
+export enum ENUM_InvoiceType {
+  inpatientPartial = "ip-partial",
+  inpatientDischarge = "ip-discharge",
+  outpatient = "op-normal"
+}
+export enum ENUM_PrintingType {
+  browser = "browser",
+  dotmatrix = "dotmatrix",
+  server = "server",
+  receiptDotMatrix = "receipt-dotmatrix"
+}
+export enum ENUM_PrintType {
+  returnInvoice= "return-invoice",
+  provisionalInvoice="provisional-invoice"
+}
