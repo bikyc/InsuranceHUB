@@ -1,18 +1,18 @@
-import { AppliedTax } from "../../../dispensary/dispensary-main/sales-main/phrm-taxation/dtos/taxation.dto";
+import { AppliedTax } from "../../DTOs/taxation.dto";
 import { PatientInfo_DTO, PaymentMode } from "../pharmacy-invoice-print/pharmacy-invoice-print.dto";
 
 export class PharmacyCreditNotePrint_DTO {
-    InvoiceReturnId: number = null;
+    InvoiceReturnId: number = 0;
     InvoiceCode: string = '';
     ReceiptDate: string = '';
     ProviderName: string = '';
     ProviderNMCNumber: string = '';
     PrintCount: number = 0;
     CurrentFiscalYearName: string = '';
-    CreditNoteNo: number = null;
+    CreditNoteNo: number = 0;
     ReferenceInvoiceNo: string = '';
-    ClaimCode: number = null;
-    PolicyNo: number = null;
+    ClaimCode: number = 0;
+    PolicyNo: number = 0;
     PaymentMode: string = '';
     SubTotal: number = 0;
     DiscountPercentage: number = 0;
@@ -28,7 +28,7 @@ export class PharmacyCreditNotePrint_DTO {
     Tender: number = 0;
     Change: number = 0;
     CreditOrganizationName: string = '';
-    Remarks: string = null;
+    Remarks: string = '';
     BillingUser: string = '';
     IsReturned: boolean = false;
     StoreId: number = 0;

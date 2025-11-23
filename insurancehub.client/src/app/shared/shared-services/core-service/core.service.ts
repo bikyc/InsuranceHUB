@@ -5,6 +5,7 @@ import { CFGParameterModel } from "../../models/cfg-parameter.model";
 import { PrinterSettingsModel } from "../../../setting/printers/select-printer/printer-settings.model";
 import * as qz from 'qz-tray';
 import { stob64, hextorstr, KEYUTIL, KJUR } from 'jsrsasign';
+import { PatientAddressDisplaySettings_DTO } from "../../DTOs/patient-address-display-settings.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,8 @@ export class CoreService {
   public CustomLabels: { [moduleName: string]: { [key: string]: string; }; } = {};
   public AllPrinterSettings: Array<PrinterSettingsModel> = [];
   QzTrayObject: any;
+  PatientAddressDisplaySettings = new PatientAddressDisplaySettings_DTO();
+  public currencyUnit: string = "";
 
   constructor(
     public coreBlService: CoreBLService,
@@ -280,5 +283,133 @@ export class CoreService {
     }
     return false;
   }
+  SortPatientAddress(patient: any, addressOf: string = ""): string { // : This method will be called from different component, those component have different patient object types. That's why here, receiving patient as type `any` instead of type `Patient`
+    if (!patient) {
+      console.error("Patient object is null. So address can't be sorted.");
+      return '';
+    }
+    let patientAddress = {
+      Address: patient.Address ? patient.Address : null,
+      MunicipalityName: patient.MunicipalityName ? patient.MunicipalityName : null,
+      CountrySubDivisionName: patient.CountrySubDivisionName ? patient.CountrySubDivisionName : null,
+      CountryName: patient.CountryName ? patient.CountryName : null,
+      WardNumber: patient.WardNumber ? patient.WardNumber : null
+    };
+    // : Get PatientAddressDisplaySettings parameter values.
+    let patientAddressDisplayParam = this.Parameters.find(a => a.ParameterGroupName === 'Billing' && a.ParameterName === 'PatientAddressDisplaySettings');
 
+    if (patientAddressDisplayParam && patientAddressDisplayParam.ParameterValue) {
+      this.ParsePatientAddressDisplayParam(patientAddressDisplayParam.ParameterValue, addressOf);
+    }
+    else {
+      console.error("Unable to get parameter for ParameterName : 'PatientAddressDisplaySettings'.");
+      return '';
+    }
+
+    const displaySettings = this.PatientAddressDisplaySettings;
+
+    // Create an array with the address properties and their display sequences
+    let addressProperties = [
+      { name: 'CountryName', sequence: displaySettings.CountryDisplaySequence, show: displaySettings.ShowCountry },
+      { name: 'CountrySubDivisionName', sequence: displaySettings.CountrySubDivisionDisplaySequence, show: displaySettings.ShowCountrySubDivision },
+      { name: 'MunicipalityName', sequence: displaySettings.MunicipalityDisplaySequence, show: displaySettings.ShowMunicipality },
+      { name: 'WardNumber', sequence: displaySettings.WardNumberDisplaySequence, show: displaySettings.ShowWardNumber },
+      { name: 'Address', sequence: displaySettings.AddressDisplaySequence, show: displaySettings.ShowAddress },
+    ];
+
+    // Filter properties based on the show property being true and then sort based on sequence
+    let sortedAddressProperties = addressProperties
+      .filter(property => property.show)
+      .sort((a, b) => a.sequence - b.sequence);
+
+    // : Construct the sorted address string
+    let sortedAddressParts = sortedAddressProperties
+      .filter(property => patientAddress[property.name as keyof typeof patientAddress] !== undefined)
+      .map(property => patientAddress[property.name as keyof typeof patientAddress]);
+
+
+    // Find indexes of null values in sortedAddressParts
+    let nullIndexes = sortedAddressParts.reduce((acc, currentValue, index) => {
+      if (currentValue === null || currentValue === '' || currentValue === undefined) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
+
+    // : Remove items from sortedAddressParts and sortedAddressProperties at null indexes
+    sortedAddressParts = sortedAddressParts.filter((_, index) => !nullIndexes.includes(index));
+    sortedAddressProperties = sortedAddressProperties.filter((_, index) => !nullIndexes.includes(index));
+
+    const wardNumberIndex = sortedAddressProperties.findIndex(property => property.name === 'WardNumber');
+
+    if (wardNumberIndex !== -1) {
+      // : If display sequence of WardNumber is other than first then, append between the previous address part and ward number and then remove ward number part from sortedAddressParts
+      if (wardNumberIndex > 0 && wardNumberIndex < sortedAddressParts.length) {
+        sortedAddressParts[wardNumberIndex - 1] = `${sortedAddressParts[wardNumberIndex - 1]}-${sortedAddressParts[wardNumberIndex]}`;
+        sortedAddressParts.splice(wardNumberIndex, 1); // Remove WardNumber from sortedAddressParts
+        sortedAddressProperties.splice(wardNumberIndex, 1); // Remove WardNumber from sortedAddressProperties
+      }
+    }
+
+    // : Join the values with a comma and space
+    const sortedAddress = sortedAddressParts
+      .filter(part => part !== null && part !== '' && part !== undefined)
+      .join(', ');
+
+    return sortedAddress;
+  }
+  ParsePatientAddressDisplayParam(parameterValue: string, addressOf: string = ""): void {
+    const parsedSettings = JSON.parse(parameterValue);
+
+    let patientAddress = parsedSettings.find((f: any) => f.ShowPatientAddress);
+    if (patientAddress) {
+      if (addressOf === 'global_patient_address') {
+        this.PatientAddressDisplaySettings.ShowPatientAddress = patientAddress.ShowPatientAddress;
+      }
+      else {
+        this.PatientAddressDisplaySettings.ShowPatientAddress = true;
+      }
+    }
+
+    let country = parsedSettings.find((f: any) => f.ShowCountry);
+    if (country) {
+      this.PatientAddressDisplaySettings.ShowCountry = country.ShowCountry;
+      this.PatientAddressDisplaySettings.CountryDisplaySequence = parseInt(country.CountryDisplaySequence) || 0;
+    }
+
+    let countrySubDivision = parsedSettings.find((f: any) => f.ShowCountrySubDivision);
+    if (countrySubDivision) {
+      this.PatientAddressDisplaySettings.ShowCountrySubDivision = countrySubDivision.ShowCountrySubDivision;
+      this.PatientAddressDisplaySettings.CountrySubDivisionDisplaySequence = parseInt(countrySubDivision.CountrySubDivisionDisplaySequence) || 0;
+    }
+
+    let municipality = parsedSettings.find((f: any) => f.ShowMunicipality);
+    if (municipality) {
+      this.PatientAddressDisplaySettings.ShowMunicipality = municipality.ShowMunicipality;
+      this.PatientAddressDisplaySettings.MunicipalityDisplaySequence = parseInt(municipality.MunicipalityDisplaySequence) || 0;
+    }
+
+    let wardNumber = parsedSettings.find((f: any) => f.ShowWardNumber);
+    if (wardNumber) {
+      this.PatientAddressDisplaySettings.ShowWardNumber = wardNumber.ShowWardNumber;
+      this.PatientAddressDisplaySettings.WardNumberDisplaySequence = parseInt(wardNumber.WardNumberDisplaySequence) || 0;
+    }
+
+    let address = parsedSettings.find((f: any) => f.ShowAddress);
+    if (address) {
+      this.PatientAddressDisplaySettings.ShowAddress = address.ShowAddress;
+      this.PatientAddressDisplaySettings.AddressDisplaySequence = parseInt(address.AddressDisplaySequence) || 0;
+    }
+  }
+    public SetCurrencyUnit() {
+    var currParameter = this.Parameters.find(
+      (a) => a.ParameterName == "Currency"
+    );
+    if (currParameter)
+      this.currencyUnit = JSON.parse(currParameter.ParameterValue).CurrencyUnit;
+    else
+      this.msgBoxServ.showMessage("error", [
+        "Please set currency unit in parameters.",
+      ]);
+  }
 }

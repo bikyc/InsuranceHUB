@@ -10,6 +10,11 @@ import { NepaliCalendarModule } from './calendar/np/nepali-calendar.module';
 import { Bil_Print_InvoiceMain_Component } from './print-pages/invoice-main/bil-print-invoice-main.component';
 import { Bill_Print_CreditNote_Component } from './print-pages/credit-note/bill-print-credit-note.component';
 import { PharmacyCreditNotePrintComponent } from './print-pages/pharmacy-credit-note-print/pharmacy-credit-note-print.component';
+import { DanpheDateTime } from "./pipes/danphe-datetime.pipe";
+import { NepaliDatePipe } from "./pipes/nepali-date.pipe";
+import { PharmacyInvoicePrintComponent } from './print-pages/pharmacy-invoice-print/pharmacy-invoice-print.component';
+import { NumberInWordsPipe } from "./pipes/number-inwords.pipe";
+import { PaymentDetailsPipe } from "./pipes/payment-details.pipe";
 
 @NgModule({
   declarations: [
@@ -20,13 +25,18 @@ import { PharmacyCreditNotePrintComponent } from './print-pages/pharmacy-credit-
     PaginatePipe,
     Bil_Print_InvoiceMain_Component,
     Bill_Print_CreditNote_Component,
-    PharmacyCreditNotePrintComponent
+    PharmacyCreditNotePrintComponent,
+    PharmacyInvoicePrintComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     NepaliCalendarModule,
-  ],
+    DanpheDateTime,
+    NepaliDatePipe,
+    NumberInWordsPipe,
+    PaymentDetailsPipe
+],
   exports: [
     FromToDateSelectComponent,
     DatePickerComponent,
@@ -37,7 +47,8 @@ import { PharmacyCreditNotePrintComponent } from './print-pages/pharmacy-credit-
     FormsModule,
     Bil_Print_InvoiceMain_Component,
     Bill_Print_CreditNote_Component,
-    PharmacyCreditNotePrintComponent
+    PharmacyCreditNotePrintComponent,
+    PharmacyInvoicePrintComponent
   ]
 })
 export class SharedModule {}

@@ -180,10 +180,10 @@
           <tr *ngIf="InvoiceDisplaySettings.ShowHeader && receipt.StoreId">
             <td colspan=" 6">
               <div>
-                <pharmacy-billing-header *ngIf="InvoiceDisplaySettings.ShowHeader"
+                <!-- <pharmacy-billing-header *ngIf="InvoiceDisplaySettings.ShowHeader"
                                          [show-qr-code]="ShowQRCode" [QRCodeInfo]=""
                                          [StoreId]="receipt.StoreId"
-                                         [header-type]="InvoiceDisplaySettings.HeaderType"></pharmacy-billing-header>
+                                         [header-type]="InvoiceDisplaySettings.HeaderType"></pharmacy-billing-header> -->
               </div>
             </td>
           </tr>
@@ -252,7 +252,7 @@
                     </p>
                   </td>
                   <td colspan="6" style="text-align: right;" *ngIf="receipt.ProviderNMCNumber">
-                    <p class="c_paragraphs"><strong>{{'General_Labels.NMCNo'| translate}}:</strong>{{receipt.ProviderNMCNumber}}</p>
+                    <p class="c_paragraphs"><strong>{{'General_Labels.NMCNo'}}:</strong>{{receipt.ProviderNMCNumber}}</p>
                   </td>
                 </tr>
                 <tr *ngIf="receipt.ClaimCode || receipt.PolicyNo">
@@ -432,8 +432,8 @@
       </div>
     </div>
 
-    <select-printer [group-name]="'phrm-receipt'" [storage-key]="'phrm-invoice'" (on-printer-change)="OnPrinterChanged($event)">
-    </select-printer>
+    <!-- <select-printer [group-name]="'phrm-receipt'" [storage-key]="'phrm-invoice'" (on-printer-change)="OnPrinterChanged($event)">
+    </select-printer> -->
     <div style="text-align: center; margin-bottom: 15px;">
       <button class="btn blue" id="btnPrintPhrmInvoice" class="btn green btn-success" (click)="Print('credit-note')">
         Print Receipt
@@ -442,6 +442,6 @@
 
     </div>
   </div>
-  <new-print-page *ngIf="openBrowserPrintWindow" [print-data]="browserPrintContentObj" (print-sucess)="CallBackBillPrint($event)">
-  </new-print-page>
+  <!-- <new-print-page *ngIf="openBrowserPrintWindow" [print-data]="browserPrintContentObj" (print-sucess)="CallBackBillPrint($event)">
+  </new-print-page> -->
 </div>

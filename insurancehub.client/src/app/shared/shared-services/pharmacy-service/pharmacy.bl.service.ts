@@ -23,4 +23,7 @@ export class PharmacyBLService {
             throw ex;
         }
     }
+    GetInvoiceReceiptByInvoiceId(invoiceId: number) {
+        return this.pharmacyDLService.GetInvoiceReceiptByInvoiceId(invoiceId).pipe(map(res => { return res }));
+    }
 }

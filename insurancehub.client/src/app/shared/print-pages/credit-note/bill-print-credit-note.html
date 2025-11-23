@@ -63,9 +63,9 @@
         <tr *ngIf="InvoiceDisplaySettings.ShowHeader">
           <td colspan=" 6">
             <div>
-              <billing-header *ngIf="InvoiceDisplaySettings.ShowHeader"
+              <!-- <billing-header *ngIf="InvoiceDisplaySettings.ShowHeader"
                               [show-qr-code]="ShowQRCode" [QRCodeInfo]=""
-                              [header-type]="InvoiceDisplaySettings.HeaderType"></billing-header>
+                              [header-type]="InvoiceDisplaySettings.HeaderType"></billing-header> -->
             </div>
           </td>
         </tr>
@@ -195,10 +195,10 @@
   </button>
 </div>
 
-<select-printer [group-name]="'bill-receipt'" [storage-key]="'bil-creditnote'"
+<!-- <select-printer [group-name]="'bill-receipt'" [storage-key]="'bil-creditnote'"
                 (on-printer-change)="OnPrinterChanged($event)">
 </select-printer>
 
 <new-print-page *ngIf="openBrowserPrintWindow" [print-data]="browserPrintContentObj"
                 (print-sucess)="AfterPrintCompleted()">
-</new-print-page>
+</new-print-page> -->

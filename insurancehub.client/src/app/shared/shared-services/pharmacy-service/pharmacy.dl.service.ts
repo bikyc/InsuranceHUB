@@ -15,12 +15,15 @@ export class PharmacyDLService {
   public PutPrintCount(printCount: number, invoiceId: number) {
     return this.http.put<any>(`/api/PharmacySales/InvoicePrintCount?printCount=${printCount}&invoiceId=${invoiceId}`, this.options);
   }
-    public GetSaleReturnInvoiceItemsByInvoiceRetId(invoiceretid: number) {
+  public GetSaleReturnInvoiceItemsByInvoiceRetId(invoiceretid: number) {
     try {
       return this.http.get<any>("/api/PharmacySalesReturn/CreditNoteInfo?invoiceReturnId=" + invoiceretid, this.options);
     }
     catch (ex) {
       throw ex;
     }
+  }
+   public GetInvoiceReceiptByInvoiceId(invoiceId: number) {
+    return this.http.get<any>(`/api/PharmacySales/InvoiceReceiptByInvoiceId?InvoiceId=${invoiceId}`, this.options);
   }
 }
